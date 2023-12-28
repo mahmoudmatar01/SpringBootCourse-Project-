@@ -1,5 +1,14 @@
 # Spring Boot Course 
 
+## Table of Contents
+
+- [Overview](#overview)
+- [What is Spring](#what-is-spring)
+- [Problem with Spring](#problem-with-spring)
+- [Enter Spring Boot](#enter-spring-boot)
+- [Spring Boot Features](#spring-boot-features)
+- [Setting up and Development Environment](#setting-up-and-development-environment)
+
 ## Overview
 
 Provide a high-level overview of your project. Explain its purpose, key features, and any other relevant information.
@@ -76,3 +85,13 @@ Spring Boot makes it easy to create stand-alone, production-grade Spring-based A
 ### 6. **Spring Boot DevTools:**
    DevTools offers features like automatic application restart, live reload, and remote debugging, making the development process more efficient and enjoyable.
 
+## Setting up and Development Environment
+
+To set up the development environment for this project, follow these steps:
+
+### Prerequisites
+
+Make sure you have the following tools installed:
+
+- [Java Development Kit (JDK)](https://adoptopenjdk.net/)
+- [Maven](https://maven.apache.org/)
