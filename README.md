@@ -8,6 +8,9 @@
 - [Enter Spring Boot](#enter-spring-boot)
 - [Spring Boot Features](#spring-boot-features)
 - [Setting up and Development Environment](#setting-up-and-development-environment)
+- [Maven](#maven)
+- [How to Create a New Spring Project](#How-to-Create-a-New-Spring-Project)
+
 
 ## Overview
 
@@ -95,3 +98,68 @@ Make sure you have the following tools installed:
 
 - [Java Development Kit (JDK)](https://adoptopenjdk.net/)
 - [Maven](https://maven.apache.org/)
+
+## Maven
+
+[Maven](https://maven.apache.org/) is a build automation and project management tool used to manage the build lifecycle of a software project. It simplifies the process of building, testing, and packaging Java applications.
+
+### Maven Commands
+
+- **Clean the project:**
+```bash
+  mvn clean
+```
+- **Compile the project:**
+```bash
+  mvn compile
+```
+- **Package the project into a JAR file:**
+```bash
+ mvn package
+```
+- **Install the project artifacts to the local repository:**
+```bash
+ mvn install
+```
+
+## How to Create a New Spring Project
+
+Follow these steps to create a new Spring project using Spring Initializr:
+
+1. **Visit the Spring Initializr website:**
+
+   Open your web browser and go to [https://start.spring.io/](https://start.spring.io/).
+
+2. **Configure your project:**
+
+   - Choose the desired project options, such as project type (Maven or Gradle), language (Java or Kotlin), and packaging (JAR or WAR).
+   - Select the Spring Boot version.
+   - Specify project metadata, including Group, Artifact, and Package names.
+
+3. **Select dependencies:**
+
+   Choose the dependencies required for your project. Spring Initializr allows you to add common dependencies such as Spring Web, Spring Data JPA, Spring Security, and more. Click on the "Add Dependencies" button to include the necessary components.
+
+4. **Generate the project:**
+
+   After configuring your project and selecting dependencies, click the "Generate" button. This will download a ZIP file containing your project skeleton.
+
+5. **Extract the ZIP file:**
+
+   Once the ZIP file is downloaded, extract its contents to your local development environment.
+
+6. **Import into your IDE:**
+
+   Open your preferred Integrated Development Environment (IDE), such as IntelliJ IDEA, Eclipse, or Visual Studio Code. Import the project as a Maven or Gradle project, depending on your initial configuration.
+
+7. **Build and run:**
+
+   Build the project using your IDE or the command line. Run the application, and it should start on the default port (usually 8080).
+
+8. **Access the application:**
+
+   Open your web browser and go to [http://localhost:8080](http://localhost:8080) to access the default Spring Boot welcome page.
+
+Now you have successfully created and set up a new Spring project using Spring Initializr. Customize the project based on your requirements and start building your Spring application!
+
+
