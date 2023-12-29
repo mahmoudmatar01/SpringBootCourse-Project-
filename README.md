@@ -10,6 +10,14 @@
 - [Setting up and Development Environment](#setting-up-and-development-environment)
 - [Maven](#maven)
 - [How to Create a New Spring Project](#How-to-Create-a-New-Spring-Project)
+- [Starting Spring Boot](#Starting-Spring-Boot)
+- [Let's Add a Controller](#Let's-Add-a-Controller)
+- [Returning Objects from Controller](#Returning-Objects-from-Controller)
+- [How Soring MVC Works](#How-Soring-MVC-Works)
+- [**What is JPA?**](#what-is-jpa)
+- [**Entities and Relationships**](#entities-and-relationships)
+- [**Repositories and Services**](#repositories-and-services)
+- [**API Endpoints**](#api-endpoints)
 
 
 ## Overview
@@ -161,5 +169,372 @@ Follow these steps to create a new Spring project using Spring Initializr:
    Open your web browser and go to [http://localhost:8080](http://localhost:8080) to access the default Spring Boot welcome page.
 
 Now you have successfully created and set up a new Spring project using Spring Initializr. Customize the project based on your requirements and start building your Spring application!
+
+
+
+## Starting Spring Boot
+
+To start your Spring Boot application, follow these steps:
+
+1. **Default Configuration:**
+
+   Spring Boot comes with sensible defaults for configuration, reducing the need for manual setup. The default configuration is provided in the `application.properties` or `application.yml` file, allowing you to customize settings based on your project requirements.
+
+2. **Starting the Spring Application Context:**
+
+   The Spring Boot application context is responsible for managing the components of your application, handling dependency injection, and providing a runtime environment for your Spring beans. When you run your Spring Boot application, the application context is automatically started.
+
+   To run your application from the command line, use the following Maven command:
+
+ ```bash
+   mvn spring-boot:run
+```
+Alternatively, if you have a packaged JAR file, you can run it using the java -jar command:
+
+```bash
+java -jar target/your-project-1.0.0.jar
+```
+
+3. **Performing Class Path Scan:**
+
+Spring Boot performs classpath scanning to identify components, configurations, and services within your project. This is based on the package structure defined in your project. Ensure that your classes are organized in a way that Spring Boot can discover and manage them automatically.
+
+4. **Starting the Tomcat Server:**
+
+Spring Boot includes an embedded web server, such as Tomcat, Jetty, or Undertow. When you start your Spring Boot application, the embedded server is initialized automatically.
+
+If you want to customize the server settings, you can do so in the `application.properties` or `application.yml` file. For example, to change the default port to 8081:
+
+```properties
+server.port=8081
+```
+The embedded server starts and your Spring Boot application becomes accessible at the specified port. Open your web browser and navigate to http://localhost:8080 to access the application.
+
+
+## Let's Add a Controller
+
+In Spring Boot, controllers are responsible for handling incoming HTTP requests, processing them, and returning an appropriate response. Here's how you can create a simple controller:
+
+1. **Create a Java Class:**
+
+   Create a new Java class in your project. For example, `HelloController.java`.
+
+2. **Marked with Annotations:**
+
+   Mark the class with the `@RestController` annotation. This annotation combines the `@Controller` and `@ResponseBody` annotations, indicating that this class will handle web requests and return the response directly.
+
+```java
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class HelloController {
+       // Your controller logic will go here
+   }
+```
+1. **Define Request Mapping:**
+
+Use the `@RequestMapping` annotation to define the URL path that triggers the controller method. Also, specify the HTTP method using the `method` attribute.
+
+```java
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@RestController
+public class HelloController {
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String hello() {
+        return "Hello, Spring Boot!";
+    }
+}
+```
+
+In this example, the `hello` method is mapped to the `/hello` URL, and it responds to HTTP GET requests.
+
+
+2. **Access the Controller:**
+
+After adding the controller, run your Spring Boot application. Open your web browser and navigate to http://localhost:8080/hello. You should see the response "Hello, Spring Boot!".
+
+The URL `/hello` triggers the `hello` method in the` HelloController` class when accessed with a GET request.
+
+Now you have a basic controller set up in your Spring Boot project. You can expand on this example by adding more methods, handling different HTTP methods, and incorporating path variables or request parameters as needed.
+
+
+## Returning Objects from Controller
+
+In Spring Boot, controllers can return objects as responses. Here's how you can return a list of `Topic` objects from your controller:
+
+1. **Create a Java Class:**
+
+   Ensure you have a model class, for example, `Topic.java`, to represent the data you want to return.
+
+```java
+   import lombok.AllArgsConstructor;
+   import lombok.Data;
+   import lombok.NoArgsConstructor;
+
+   @Data
+   @AllArgsConstructor
+   @NoArgsConstructor
+   public class Topic {
+       private Long id;
+       private String name;
+   }
+```
+
+2. **Create a Controller:**
+
+Create a controller class, for example,` TopicController.java.` This controller will handle requests related to topics.
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class TopicController {
+
+    List<Topic> topicList = List.of(
+            new Topic(1L, "topic 1"),
+            new Topic(2L, "topic 2"),
+            new Topic(3L, "topic 3"),
+            new Topic(4L, "topic 4"),
+            new Topic(5L, "topic 5")
+    );
+
+    @RequestMapping(value = "/topics", method = RequestMethod.GET)
+    public ResponseEntity<List<Topic>> findTopics() {
+        return ResponseEntity.status(HttpStatus.OK).body(topicList);
+    }
+}
+```
+
+3. **Access the Controller:**
+
+After adding the controller, run your Spring Boot application. Open your web browser and navigate to http://localhost:8080/topics. You should see a JSON response containing the list of topics.
+
+The URL` /topics` triggers the `findTopics` method in the `TopicController` class when accessed with a `GET `request.
+
+
+
+## How Spring MVC Works
+
+Spring MVC (Model-View-Controller) is a framework within the larger Spring framework that facilitates the development of web applications. It follows the MVC architectural pattern, which divides the application into three main components: Model, View, and Controller. Here's an overview of how Spring MVC works:
+
+1. **Client Sends a Request:**
+
+   When a user interacts with a web application (for example, by clicking a link or submitting a form), the client sends an HTTP request to the server.
+
+2. **DispatcherServlet Handles the Request:**
+
+   In a Spring MVC application, the central component for handling web requests is the `DispatcherServlet`. It acts as a front controller, intercepting incoming requests and dispatching them to the appropriate controllers.
+
+3. **Controller Processes the Request:**
+
+   The `Controller` is responsible for processing the request and returning a response. Controllers are typically annotated with `@Controller` and contain methods annotated with `@RequestMapping` to map URLs to specific actions.
+
+   ```java
+   import org.springframework.stereotype.Controller;
+   import org.springframework.web.bind.annotation.RequestMapping;
+   import org.springframework.web.bind.annotation.RequestMethod;
+
+   @Controller
+   public class MyController {
+
+       @RequestMapping(value = "/myEndpoint", method = RequestMethod.GET)
+       public String handleRequest() {
+           // Controller logic goes here
+           return "viewName"; // Name of the view to be rendered
+       }
+   }
+   ```
+
+4. **Controller Returns a Model and View:**
+
+The controller processes the request, performs any necessary business logic, and returns a ModelAndView object. The Model contains data that will be passed to the view for rendering, and the View is the template or page that will be displayed to the user.
+
+```java
+@RestController
+public class MvcController {
+    @RequestMapping(value = "/myEndpoint", method = RequestMethod.GET)
+    public ModelAndView handleRequest() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("message", "Hello, Spring MVC!");
+        modelAndView.setViewName("myView");
+        return modelAndView;
+    }
+}
+```
+
+5. **ViewResolver Resolves the View:**
+
+The `ViewResolver` is responsible for translating the logical view name returned by the controller into the actual view template. It resolves the view and renders the response.
+
+6. **Response Sent to the Client:**
+
+Finally, the `DispatcherServlet` sends the response back to the client, and the user sees the rendered view.
+
+
+## Configuration
+
+The application uses `application.properties` for configuration. Update the file to set your database properties, such as the URL, username, and password.
+
+```properties
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+## What is JPA?
+
+Java Persistence API (JPA) is a Java specification for accessing, managing, and persisting data between Java objects and relational databases. It provides a standardized way to interact with databases using object-oriented approaches.
+
+## Adding Spring Data JPA
+
+Spring Data JPA is a part of the larger Spring Data project that makes it easy to implement JPA-based repositories. It provides a set of abstractions and default implementations for common database operations.
+
+
+## Entities and Relationships
+
+### Topics Entity
+```java
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Topics {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String topicName;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Course> courseList = new ArrayList<>();
+}
+```
+
+### Course Entity
+```java
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Course {
+    // ... (similar structure)
+}
+```
+
+### Lesson Entity
+```java
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Lesson {
+    // ... (similar structure)
+}
+```
+
+## Repositories and Services
+
+### Topics Repository
+```java
+@Repository
+public interface TopicsRepository extends JpaRepository<Topics, Long> {
+}
+```
+
+### Course Repository
+```java
+@Repository
+public interface CourseRepository extends JpaRepository<Course, Long> {
+}
+```
+
+### Lesson Repository
+```java
+@Repository
+public interface LessonRepository extends JpaRepository<Lesson, Long> {
+}
+```
+
+### Topics Service Implementation
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class TopicServiceImpl implements TopicService {
+    // ... (similar structure)
+}
+```
+
+### Course Service Implementation
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class CourseServiceImpl implements CourseService {
+    // ... (similar structure)
+}
+
+```
+
+### Lesson Service Implementation
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class LessonServiceImpl implements LessonService {
+    // ... (similar structure)
+}
+
+```
+
+
+## API Endpoints
+
+### Topic Controller
+```java
+@RestController
+@RequestMapping("/api/topic")
+@RequiredArgsConstructor
+public class TopicsController {
+    // ... (similar structure)
+}
+```
+
+### Course Controller
+```java
+@RestController
+@RequestMapping("/api/course")
+@RequiredArgsConstructor
+public class CourseController {
+    // ... (similar structure)
+}
+```
+
+### Lesson Controller
+```java
+@RestController
+@RequestMapping("/api/lesson")
+@RequiredArgsConstructor
+public class LessonController {
+    // ... (similar structure)
+}
+```
+
+
+
+
+
 
 
